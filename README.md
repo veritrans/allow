@@ -1,6 +1,7 @@
 Allow - permission library
 ==========================
 
+Library to manage users' permissions. Build in object oriented way, have support for rails, activerecord and activeadmin
 
 Usage:
 
