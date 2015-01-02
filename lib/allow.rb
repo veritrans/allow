@@ -3,6 +3,7 @@ module Allow
 
   autoload :Model, 'allow/model'
   autoload :Controller, 'allow/controller'
+  autoload :ActiveAdmin, 'allow/active_admin'
 
 end
 
