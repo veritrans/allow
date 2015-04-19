@@ -1,7 +1,7 @@
 Allow - permission library
 ==========================
 
-Library to manage users' permissions. Build in object oriented way, have support for rails, activerecord and activeadmin
+Library to manage users' permissions. Build in object oriented way, have support for Rails(4.0, 4.1), ActiveRecord and ActiveAdmin
 
 Usage:
 
@@ -11,26 +11,35 @@ class User < ActiveRecord::Base
   include Allow::Model
   include Allow::Model::ComaStorage
 
-  self.roles_namespace = "Roles::Map::"
+  self.roles_namespace = "Roles::Portal::"
   ROLES = ['admin', 'customer_service', 'financial', 'developer', 'operations']
 end
 
-User.find(1).roles #=> [:admin]
-User.find(1).roles_list #=> [Roles::Map::Admin]
+user = User.find(1)
 
-User.find(1).can?(:index, :payments)
+user.roles = [:admin, :developer] # => save 'admin,developer' in column 'roles'
+
+user.roles # => [:admin, :developer]
+user.roles_list # => [Roles::Portal::Admin, Roles::Portal::Developer]
+
+user.has_role?(:admin) # => true
+user.remove_role!(:admin)
+user.add_role!(:admin)
+
+user.can?(:index, :payments)
+
+User.with_role(:admin) # => AR scope
 ```
 
 Define roles:
 
 ```ruby
 
-class Roles::Map::Developer < Roles::Map::BaseUser
-  reset! # reloading problem
+class Roles::Portal::Developer < Roles::Portal::BaseUser
+  reset!
 
   cant :all
 
-  # 
   can :index, :payments
   can :show, :payments
 
@@ -50,4 +59,50 @@ class Roles::Map::Developer < Roles::Map::BaseUser
 
 end
 
+```
+
+Integrate with Rails controller:
+
+```ruby
+class ApplicationController < ActionController::Base
+  include Allow::Controller
+
+  # Optional
+  supervisor_resource :products
+
+  # Optional, allows override current user
+  def supervisor_current_user
+    current_user
+  end
+
+  # Optional, called when supervisor_current_user don't have permission
+  def supervisor_access_denied!(options = {})
+    if options.present? && options[:user].present?
+      user = options[:user]
+      Rails.logger.info "User: #{user.id}"
+      Rails.logger.info "User roles: #{user.roles}"
+      Rails.logger.info "Failed: can? #{options[:action]}, #{options[:resource]}"
+    end
+
+    if request.env['REQUEST_PATH'] == root_path
+      render file: "#{Rails.root}/public/403.html", :status => :forbidden, layout: false, content_type: 'text/html'
+    else
+      redirect_to :root, alert: 'You are not authorized to access this page.'#, status: :forbidden
+    end
+  end
+
+  # Optional
+  def supervisor_resource_obj
+    Product.find(params[:id])
+  end
+end
+```
+
+Integrate with ActiveAdmin:
+
+```ruby
+# config/active_admin.rb
+ActiveAdmin.setup do |config|
+  config.authorization_adapter = 'Allow::ActiveAdmin'
+end
 ```
