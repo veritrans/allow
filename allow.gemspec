@@ -16,8 +16,9 @@ Gem::Specification.new do |s|
 
   s.require_paths = ["lib"]
 
-  s.add_development_dependency "rspec", ">= 2.9.0", "< 3"
-  s.add_development_dependency "rspec-rails", '~> 0'
-  s.add_development_dependency "rails", '~> 0'
-  s.add_development_dependency 'sqlite3', '~> 0'
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "rspec-rails"
+  s.add_development_dependency "rails"
+  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'activeadmin', '1.0.0.pre1'
 end

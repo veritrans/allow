@@ -10,10 +10,11 @@ require 'active_support'
 require 'allow'
 
 GEM_ROOT = File.expand_path("../..", __FILE__)
-ENV['RAILS_ENV'] = 'development'
+ENV['RAILS_ENV'] = 'test'
+#ENV['RAILS_ENV'] = 'development'
 
-#Rails.logger = Logger.new(STDOUT)
-Rails.logger = Logger.new(StringIO.new)
+Rails.logger = Logger.new(STDOUT)
+#Rails.logger = Logger.new(StringIO.new)
 
 module SpecHelpers
   def be_true
@@ -42,4 +43,14 @@ RSpec.configure do |config|
   def config.render_views?
     rendering_views
   end
+end
+
+def load_dummy_rails_app
+  require 'kaminari'
+  require 'inherited_resources'
+
+  require 'dummy/config/environment'
+  ActiveRecord::Migration.verbose = false
+  ActiveRecord::Base.logger = Logger.new(STDOUT)
+  ActiveRecord::Migrator.migrate(File.expand_path('../dummy/db/migrate', __FILE__))
 end
