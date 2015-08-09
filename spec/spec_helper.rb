@@ -11,10 +11,8 @@ require 'allow'
 
 GEM_ROOT = File.expand_path("../..", __FILE__)
 ENV['RAILS_ENV'] = 'test'
-#ENV['RAILS_ENV'] = 'development'
 
-Rails.logger = Logger.new(STDOUT)
-#Rails.logger = Logger.new(StringIO.new)
+Rails.logger = Logger.new(StringIO.new)
 
 module SpecHelpers
   def be_true
@@ -51,6 +49,9 @@ def load_dummy_rails_app
 
   require 'dummy/config/environment'
   ActiveRecord::Migration.verbose = false
-  ActiveRecord::Base.logger = Logger.new(STDOUT)
+  ActiveRecord::Base.logger = Logger.new(nil)
   ActiveRecord::Migrator.migrate(File.expand_path('../dummy/db/migrate', __FILE__))
+
+  #ActiveRecord::Base.logger = Logger.new(STDOUT)
+  #Rails.logger = Logger.new(STDOUT)
 end

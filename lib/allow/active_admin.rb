@@ -2,25 +2,9 @@ class Allow::ActiveAdmin < ActiveAdmin::AuthorizationAdapter
 
   def authorized?(action, subject = nil)
 
-    # In active_admin, to decide show or not show item in top menu
-    # we need to check in every resource-related file
-    #
-    #   menu parent: 'Admin', if: proc{ current_admin_user.can?(:read, :jobs) }
-    #
-    # Bug for ActiveAdmin::Comment, it defiend in active_admin gem.
-    # So we need this hack to controll show or not show "Comments" in top menu
+    # Force ActiveAdmin::Comment to be :"active_admin/comments"
     if subject == ActiveAdmin::Comment
-      p [:check, action, :active_admin_comment]
-      if @user.can?(action, :active_admin_comment)
-        return true
-      else
-        return false
-      end
-    end
-
-    if subject.is_a?(ActiveAdmin::Comment)
-      p [:check, action, subject]
-      if @user.can?(action, subject)
+      if @user.can?(action, :"active_admin/comments")
         return true
       else
         return false
@@ -33,12 +17,8 @@ class Allow::ActiveAdmin < ActiveAdmin::AuthorizationAdapter
       (subject || supervisor_resource_name.to_sym)
     end
 
-    #p [:authorized?, subject, action, subject_name]
-    #p [:can?, action, supervisor_resource_name.to_sym]
     # action => Symbol, :read, :update, :create...
     # subject_name => Record or Symbol
-    #p [:one, action, subject_name]
-    #p [:two, action, supervisor_resource_name.to_sym]
     if @user.can?(action, subject_name) || @user.can?(action, supervisor_resource_name.to_sym)
       true
     else
@@ -57,6 +37,62 @@ class Allow::ActiveAdmin < ActiveAdmin::AuthorizationAdapter
 
   def supervisor_denied(action, subject_name)
     Rails.logger.info "Rejected for #{@user.class}:#{@user.id} for #{supervisor_resource_name.to_sym}/#{action}"
+  end
+
+  # By including this class, it will check every action in controller,
+  # including custom actions defined via `member_action` and `collection_action`
+  # usage
+  #
+  #   controller do
+  #     include Allow::ActiveAdmin::CheckAll
+  #   end
+  #
+  module CheckAll
+    extend ActiveSupport::Concern
+
+    included do
+      before_action :check_permission_again
+    end
+
+    def supervisor_resource_name
+      controller_name
+    end
+
+    # Because active_admin don't check permissions for custom methods, but I do
+    # (collection_action, page_action, member_action)
+    def check_permission_again
+      action = params[:action].to_sym
+      action = :read if action == :index || action == :show
+      user = current_admin_user
+
+      # Build resource from controller and params[:id]
+      # Because sometimes we limit via proc, eg open current_admin_user
+      subject = supervisor_resource_name.to_sym
+      begin
+        if !active_admin_config.is_a?(ActiveAdmin::Page)
+          klass = active_admin_config.resource_class
+          subject = if klass && params[:id]
+            klass.find_by_id(params[:id]) || klass
+          else
+            klass
+          end
+        end
+      rescue Object => error
+        $stderr.puts error.message
+        $stderr.puts error.backtrace
+      end
+
+      if !user.can?(action, subject, params)
+        Rails.logger.info "Deny access for #{supervisor_resource_name}/#{action} to #{user.class}:#{user.id}"
+        # raise ActiveAdmin::AccessDenied(...) # This is supposed way, but I prefer to redirect back
+        flash[:error] = "You don't have access to that page"
+        redirect_back_or_to "/admin"
+        return false
+      end
+    rescue Object => error
+      $stderr.puts error.message
+      $stderr.puts error.backtrace
+    end
   end
 
 end
