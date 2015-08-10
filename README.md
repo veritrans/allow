@@ -1,7 +1,9 @@
 Allow - permission library
 ==========================
 
-Library to manage users' permissions. Build in object oriented way, have support for Rails(4.0, 4.1), ActiveRecord and ActiveAdmin
+[![Build Status](https://travis-ci.org/veritrans/allow.svg?branch=master)](https://travis-ci.org/veritrans/allow)
+
+Library to manage users' permissions. Build in object oriented way, have support for Rails(4.0, 4.1, 4.2), ActiveRecord and ActiveAdmin
 
 Usage:
 
