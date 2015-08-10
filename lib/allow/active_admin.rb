@@ -40,7 +40,7 @@ class Allow::ActiveAdmin < ActiveAdmin::AuthorizationAdapter
   end
 
   # By including this class, it will check every action in controller,
-  # including custom actions defined via `member_action` and `collection_action`
+  # including custom actions defined via `member_action`, `collection_action` and `page_action`
   # usage
   #
   #   controller do

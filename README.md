@@ -117,3 +117,5 @@ ActiveAdmin.setup do |config|
   config.authorization_adapter = 'Allow::ActiveAdmin'
 end
 ```
+
+For mode details see [active_admin_docs.md](./active_admin_docs.md)
