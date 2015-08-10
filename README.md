@@ -98,6 +98,17 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+Define custom action group:
+
+```ruby
+Allow::Supervisor.groups[:create_and_edit] = [:new, :create, :edit, :update]
+# default groups
+# view:          [:index, :show]
+# manage:        [:index, :show, :new, :create, :edit, :update, :destroy]
+# anything_with: [ all actions in controller ]
+```
+
+
 Integrate with ActiveAdmin:
 
 ```ruby
