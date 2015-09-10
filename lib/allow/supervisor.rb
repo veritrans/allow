@@ -4,9 +4,7 @@ module Allow::Supervisor
   @@groups = {
     manage:   [:index, :show, :new, :create, :edit, :update, :destroy],
     see:      [:index, :show],
-    view:     [:index, :show],
-    manage_payment: [:index, :show, :new, :create, :edit, :update, :destroy, :challenge],
-    manage_admin_tools: [:read, :create, :update, :destroy]
+    view:     [:index, :show]
   }
 
   def check_permission(user, action, resource = nil, controller_params = nil)

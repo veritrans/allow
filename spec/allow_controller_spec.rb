@@ -4,10 +4,7 @@ require 'action_controller'
 require 'action_view'
 require 'active_record'
 
-require 'rspec/rails/adapters'
-require 'rspec/rails/view_rendering'
-require 'rspec/rails/example/rails_example_group'
-require 'rspec/rails/example/controller_example_group'
+require 'rspec/rails'
 
 module Roles; end
 

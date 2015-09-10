@@ -1,7 +1,9 @@
 Allow - permission library
 ==========================
 
-Library to manage users' permissions. Build in object oriented way, have support for Rails(4.0, 4.1), ActiveRecord and ActiveAdmin
+[![Build Status](https://travis-ci.org/veritrans/allow.svg?branch=master)](https://travis-ci.org/veritrans/allow)
+
+Library to manage users' permissions. Build in object oriented way, have support for Rails(4.0, 4.1, 4.2), ActiveRecord and ActiveAdmin
 
 Usage:
 
@@ -98,6 +100,17 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+Define custom action group:
+
+```ruby
+Allow::Supervisor.groups[:create_and_edit] = [:new, :create, :edit, :update]
+# default groups
+# view:          [:index, :show]
+# manage:        [:index, :show, :new, :create, :edit, :update, :destroy]
+# anything_with: [ all actions in controller ]
+```
+
+
 Integrate with ActiveAdmin:
 
 ```ruby
@@ -106,3 +119,5 @@ ActiveAdmin.setup do |config|
   config.authorization_adapter = 'Allow::ActiveAdmin'
 end
 ```
+
+For mode details see [active_admin_docs.md](./active_admin_docs.md)
