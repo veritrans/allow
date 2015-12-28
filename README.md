@@ -36,7 +36,15 @@ User.with_role(:admin) # => AR scope
 Define roles:
 
 ```ruby
+class Roles::Manager < Allow::Role
+  can :all
+  cant :create, :users
+end
+```
 
+With namespace and inheritance:
+
+```ruby
 class Roles::Portal::Developer < Roles::Portal::BaseUser
   reset!
 
