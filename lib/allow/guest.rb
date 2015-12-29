@@ -5,3 +5,10 @@ class Allow::Guest
     [:guest]
   end
 end
+
+module Roles
+  class Guest < Allow::Role
+    can :all
+  end
+end
+
