@@ -1,4 +1,4 @@
 script: "bundle exec rspec"
 rvm:
-  - 2.2.10
+  - 2.2.5
   - 2.3.1
