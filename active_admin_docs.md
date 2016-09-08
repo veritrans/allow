@@ -66,7 +66,7 @@ For actions defined via `member_action`, `collection_action` and `page_action` t
 ActiveAdmin.register Dog do
   collection_action :private_stats do
     authorize! :private_stats
-    render text: "Private Dogs Stats"
+    render plain: "Private Dogs Stats"
   end
 end
 ```

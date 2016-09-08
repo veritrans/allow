@@ -1,6 +1,6 @@
 development:
   adapter: sqlite3
-  database: ":memory:"
+  database: "db.sqlite"
 
 test:
   adapter: sqlite3

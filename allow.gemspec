@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.author      = ["Pavel Evstigneev", "Veritrans team"]
   s.email       = ["pavel.evstigneev@veritrans.co.id"]
   s.homepage    = "http://github.com/veritrans/allow"
-  s.summary     = %q{Permission library}
+  s.summary     = %q{Permission library for Ruby and Rails applications}
   s.description = "Library to manage users' permissions. Build in object oriented way, have support for rails, activerecord and activeadmin"
   s.licenses    = ['MIT']
 
@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "rspec-rails"
-  s.add_development_dependency "rails"
+  s.add_development_dependency "rails", ">= 4.0"
   s.add_development_dependency 'sqlite3'
-  s.add_development_dependency 'activeadmin', '1.0.0.pre1'
+  s.add_development_dependency 'activeadmin', '1.0.0.pre4'
 end

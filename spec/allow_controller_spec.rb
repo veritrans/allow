@@ -55,15 +55,15 @@ class AllowTestingsController < ActionController::Base
   include Rails.application.routes.url_helpers
 
   def new
-    render text: "new", layout: false
+    render plain: "new", layout: false
   end
 
   def index
-    render text: "index", layout: false
+    render plain: "index", layout: false
   end
 
   def supervisor_access_denied!(options = {})
-    render text: "supervisor_access_denied!", status: 403
+    render plain: "supervisor_access_denied!", status: 403
   end
 end
 

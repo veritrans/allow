@@ -47,11 +47,16 @@ def load_dummy_rails_app
   require 'kaminari'
   require 'inherited_resources'
 
+  require 'dummy/config/boot'
   require 'dummy/config/environment'
-  ActiveRecord::Migration.verbose = false
-  ActiveRecord::Base.logger = Logger.new(nil)
-  ActiveRecord::Migrator.migrate(File.expand_path('../dummy/db/migrate', __FILE__))
 
-  #ActiveRecord::Base.logger = Logger.new(STDOUT)
-  #Rails.logger = Logger.new(STDOUT)
+  if ENV['DEBUG']
+    ActiveRecord::Base.logger = Logger.new(STDOUT)
+    Rails.logger = Logger.new(STDOUT)
+  else
+    ActiveRecord::Migration.verbose = false
+    ActiveRecord::Base.logger = Logger.new(nil)
+  end
+
+  ActiveRecord::Migrator.migrate(File.expand_path('../dummy/db/migrate', __FILE__))
 end

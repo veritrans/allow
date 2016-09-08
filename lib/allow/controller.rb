@@ -2,7 +2,7 @@ module Allow::Controller
   extend ActiveSupport::Concern
 
   included do
-    before_filter :check_permission
+    before_action :check_permission
   end
 
   module ClassMethods

@@ -5,7 +5,7 @@ ActiveAdmin.register_page "Feedback" do
   end
 
   page_action :latest do
-    render text: "Feedback - latest"
+    render plain: "Feedback - latest"
   end
 
   controller do
