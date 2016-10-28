@@ -48,7 +48,8 @@ class Allow::Role
       last_affected_pemission = perm if v === true or v === false
     end
 
-    #puts "Final on #{last_affected_pemission} #{challenge_permission(user, action, resource, last_affected_pemission)}"
+    Allow.logger.info "Checked #{user} #{action} #{resource}"
+    Allow.logger.info "Final on #{last_affected_pemission} #{challenge_permission(user, action, resource, last_affected_pemission)}"
     result
   end
 
